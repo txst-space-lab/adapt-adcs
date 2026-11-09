@@ -21,4 +21,5 @@ Work is tracked in [GitHub Issues](https://github.com/txst-space-lab/adapt-adcs/
 |---|---|
 | [`GLOSSARY.md`](GLOSSARY.md) | Domain language for ADCS and ADAPT |
 | [`docs/mission/`](docs/mission/) | Mission source material: the overview deck and ADCS-relevant meeting notes |
+| [`research/`](research/) | Collected prior art, one folder per topic, e.g. [OreSat reaction wheels](research/reaction-wheels/oresat/) |
 | [`docs/agents/`](docs/agents/) | Configuration for AI coding agents (see also [`AGENTS.md`](AGENTS.md)) |
