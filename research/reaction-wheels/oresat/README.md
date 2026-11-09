@@ -10,6 +10,7 @@ The Portland State Aerospace Society (PSAS) builds reaction wheels for its OreSa
 | [Reaction Wheel Equations RevA](https://github.com/oresat/oresat-adcs-hardware/blob/master/documentation/Reaction%20Wheel%20Equations%20RevA.pdf) | 8 hand-written pages, hosted in OreSat's repo: the pyramid geometry, wheel inertia, required wheel speeds, and wheel mass for a 2U CubeSat. |
 | [oresat/reaction-wheels](https://github.com/oresat/reaction-wheels) | The 2016 project repo, archived in 2019: CAD, the Python controller (`Edison_RW_Code_Python/`), Octave models (`Modeling/`), and raw drop test data (`Drop Test 2016-04-26/`). No license file; the paper says PSAS releases its work under GPL v2. |
 | [2025 poster](2025-kane-pardy-advancing-oresat-adcs-poster.pdf) | Kane-Pardy, *Advancing the OreSat ADCS*, PSU graduate internship poster, 2025: flywheel sizing, a new controller board, and a plan to compare motor control algorithms. |
+| Kane-Pardy, *Advancing the OreSat ADCS: Design & Implementation of an Open-Source Reaction Wheel System*, MS thesis, Portland State, 2026 ([PDXScholar](https://pdxscholar.library.pdx.edu/open_access_etds/7192), in copyright, not copied) | The thesis behind the 2025 poster. Per its abstract: a custom three-phase motor controller running Zephyr, and a hardware-in-the-loop comparison. Trapezoidal control used the least energy and ran coolest; FOC had the strongest dynamic response, the highest torque and the most consistent torque, and was chosen. |
 | [2026 poster](2026-lutz-oresat-reaction-wheel-upgrade-poster.pdf) | Lutz et al., *OreSat Reaction Wheel Upgrade*, OSGC Student Symposium, 2026-05-22: building flight units from drone motors and hybrid bearings. |
 | [Captive hanging test](https://www.youtube.com/watch?v=Is1gPHlewtg) (video) | The 2016 ground test article hanging from a string. Pushed by hand, the wheels stop the rotation and then resist further pushes. This is our string-push test. |
 | [Drop tower test](https://www.youtube.com/watch?v=cC2FpmCP5B4) (video) | The same article in PSU's 2.1 s Dryden Drop Tower. |
@@ -38,7 +39,7 @@ Current OreSat work lives in other repos: [oresat-reaction-wheel-hardware](https
 
 ### Later work
 
-- **2025: motor control.** The plan was to implement three algorithms on a new controller board running Zephyr RTOS and compare them: trapezoidal (simple, but its torque ripple shakes the sensors), sinusoidal, and field-oriented control (FOC, smoothest across all speeds). The flywheel grew from 42 g to 70 g after modeling the 2U and 3U spacecraft.
+- **2025–2026: motor control.** The plan was to implement three algorithms on a new controller board running Zephyr RTOS and compare them: trapezoidal (simple, but its torque ripple shakes the sensors), sinusoidal, and field-oriented control (FOC, smoothest across all speeds). The flywheel grew from 42 g to 70 g after modeling the 2U and 3U spacecraft. The finished thesis (2026) chose FOC.
 - **2026: flight units.** They now build flight wheels from drone motors and hybrid bearings, at a fraction of COTS cost. The hard part was hand assembly. They succeeded more often after changing their procedures and redesigning the wheel.
 
 ## How this applies to us
@@ -60,7 +61,7 @@ Current OreSat work lives in other repos: [oresat-reaction-wheel-hardware](https
 
 **Flight unit**
 
-- **Lab-built wheels have flown.** OreSat builds its flight wheels from drone motors, so "could lab-built wheels fly?" (2026-11-06 sync) has a real precedent. Their pointing need was 5–10° for an antenna, though. ADAPT points a star tracker at stars and has a much tighter need ([Ask leadership and Payload what flight reaction wheel accuracy is needed](https://github.com/txst-space-lab/adapt-adcs/issues/9)).
+- **Lab-built flight wheels are being attempted.** OreSat builds its flight wheels from drone motors, so "could lab-built wheels fly?" (2026-11-06 sync) has a precedent in progress. No source found confirms one has flown yet; the 2026 poster says a finished wheel will "hopefully make it to space." Their pointing need was also only 5–10°, for an antenna. ADAPT points a star tracker at stars and has a much tighter need ([Ask leadership and Payload what flight reaction wheel accuracy is needed](https://github.com/txst-space-lab/adapt-adcs/issues/9)).
 - **Sizing method.** The equations give a method to repeat for ADAPT's 6U inertia once the flight hardware list is set ([Select ADCS Hardware](https://github.com/txst-space-lab/adapt-adcs/issues/8)).
 
 **Licensing.** Before copying OreSat code or hardware designs into ADAPT, check the license:
