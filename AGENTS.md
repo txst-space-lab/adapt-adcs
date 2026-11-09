@@ -13,3 +13,7 @@ Default five-role vocabulary: `needs-triage`, `needs-info`, `ready-for-agent`, `
 ### Domain docs
 
 Single-context: one `GLOSSARY.md` and `docs/adr/` at the repo root. See `docs/agents/domain.md`.
+
+## Mission context
+
+Mission source material (the ADAPT overview deck and ADCS-relevant meeting notes) lives in `docs/mission/`. Cite slides by their printed number and meetings by date. See `docs/mission/README.md`.
