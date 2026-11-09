@@ -23,6 +23,7 @@ OreSat / Portland State has its own folder: [`oresat/`](oresat/).
   - With 2.5-inch HDD wheels on the line, the controller reached its target to within 0.15–1.24°, with body rates below 1 deg/s ([Negi 2023](https://escholarship.org/uc/item/3wc05512), §3.3.4).
 - **Start with an off-the-shelf motor controller.** UC Davis dropped its custom ESC (electronic speed controller) and used drone ESCs, which saved its project schedule.
   - OreSat's 2026 thesis found field-oriented control (FOC) gives the strongest dynamic response and the most consistent torque, and trapezoidal control uses the least energy.
+- **An open F´ reaction wheel component exists.** NASA's NOS3 project publishes one, with a matching simulated wheel. It's a model for our own component, and an example of one set of flight software driving either a simulated wheel or a real one ([Flight software](#flight-software)).
 - **Machined, precision wheels are hard for students.** Cal Poly's senior project needed CNC tools, outsourced balancing and several tries at bonding the wheel to the shaft. In the end it built one wheel.
 
 ## Motor families
@@ -42,10 +43,34 @@ OreSat / Portland State has its own folder: [`oresat/`](oresat/).
 | [samdearing/cubli-reaction-wheel](https://github.com/samdearing/cubli-reaction-wheel) | 3-wheel cube: Teensy 4.1, FOC on 2804 220 KV gimbal motors, IMU fusion, nested PID/LQR | MIT | Personal project, 2026 |
 | [simplefoc/Arduino-FOC-reaction-wheel-inverted-pendulum](https://github.com/simplefoc/Arduino-FOC-reaction-wheel-inverted-pendulum) | One gimbal motor (e.g. GM4108H-120T) as a reaction wheel on the SimpleFOC shield; control loop about every 25 ms ([docs](https://docs.simplefoc.com/simplefoc_pendulum)) | MIT | Official SimpleFOC example |
 | [Hackaday: Reaction Wheel Self Balancing Cube](https://hackaday.io/project/202695-reaction-wheel-self-balancing-cube) | Student build log: Nidec 24H motors (burned out) replaced by a 2208 90 KV gimbal motor on a SimpleFOC shield with an Arduino Uno R4; MPU6050; AS5600 encoder; screws in the wheel rim to tune its inertia | None stated | Ended "very jittery" and the motor ran hot; a useful list of failure modes |
+| [UWCubeSat/HS2-RW](https://github.com/UWCubeSat/HS2-RW) ("COMPASS") | Husky Satellite Lab's successor to `hs2-reaction-wheels`: firmware for 4 pyramid wheels on an Arduino Mega (PlatformIO) with a BNO085 IMU, which outputs orientation as a quaternion. The control chain: a quaternion PD loop gives the body torque, `FourWheelMode` splits it across the four wheels, and a PD loop per wheel turns speed error into PWM and direction-pin commands. Wheel speed comes from interrupt pins | MIT header in `main.cpp`, no licence file | 29 commits, 2023-05 to 2024-02. The closest open firmware to what the demonstrator needs: replace the four-wheel split with one wheel per axis |
 | [jalouke/CubeSAT-Reaction-Wheel](https://github.com/jalouke/CubeSAT-Reaction-Wheel) | The upstream of `oresat/reaction-wheels` | None | 2016 |
 | [kcglab/satllazero](https://github.com/kcglab/satllazero) | Ariel University's open SATLLA-0 CubeSat | GPL-3.0 | Not checked for a reaction wheel |
-| [Bespi123/ADCSim](https://github.com/Bespi123/ADCSim) | MATLAB ADCS simulator with reaction wheel and sensor models | GPL-3.0 | Software only; a possible reference for the Digital Simulation's wheel model |
 | [SmallSatGasTeam/CubeWorks](https://github.com/SmallSatGasTeam/CubeWorks) | Flight software for GASPACS. A search summary credits it with a 3D-printable reaction wheel, but no wheel files turned up in its tree | None | Not confirmed |
+
+## Flight software
+
+[nasa-itc/generic_reaction_wheel](https://github.com/nasa-itc/generic_reaction_wheel) is the reaction wheel component from NASA's [NOS3](https://github.com/nasa/nos3) small-satellite simulator. One repo holds a cFS app, an F´ component, a standalone checkout program, ground system definitions, and a NOS3 simulated wheel. Licence: NOSA 1.3, stated in the README; there is no licence file. Last pushed 2026-10-29.
+
+- **The F´ component** (`fsw/fprime/rw_src/Generic_reaction_wheel.fpp`) is an active component.
+  - Two scheduler inputs: one to update data, one to send telemetry.
+  - A data output port.
+  - Commands: `SET_TORQUE` for wheel 0–2 (in units of 10⁻⁴ N·m), `REQUEST_DATA`, per-wheel `ENABLE`/`DISABLE`, `RESET_COUNTERS` and `NOOP`.
+  - Its design doc (`docs/sdd.md`) is an unfilled template.
+- **The device layer** (`fsw/shared/`) talks to each wheel over a UART in plain text: it sends `CURRENT_MOMENTUM` and parses `CURRENT_MOMENTUM=<value>`, and sets torque the same way. The simulated wheel (`sim/`) answers on the same UART, using wheel state from the 42 dynamics simulator.
+- **What it means for us.** This is an open F´ reaction wheel component to model ours on, alongside PROVES `DetumbleManager` (see #18). Its split is one answer to two open questions on the map: where the demonstrator's software runs, and how the Digital Simulation links to hardware. The flight software talks to a "wheel" over a serial link, and either a simulated wheel or the real one can be on the other end.
+- **Licence caution.** NOSA 1.3 is OSI-approved but is not compatible with the GPL. Read it before copying files into ADAPT's flight software.
+
+## Attitude simulators with reaction wheels
+
+These are software only. They're more relevant to the Digital Simulation (#4) and the controller comparison than to wheel hardware.
+
+| Project | What | Licence | Note |
+|---|---|---|---|
+| [fallow24/neuro-sat](https://github.com/fallow24/neuro-sat) | C++/Qt app that controls a spacecraft's rotation rate with reaction wheels, using either a PID or a deep neural network controller. It generates training data, trains and saves networks (MiniDNN), and adds precession disturbances | None | Inactive since 2021. A small-scale version of ADAPT's ML-versus-classical comparison |
+| [sebastianabelloc/openlodestar](https://github.com/sebastianabelloc/openlodestar) | Python ADCS simulator (v0.3): quaternion kinematics, rigid-body dynamics, reaction wheels with torque and speed saturation and gyroscopic coupling, and quaternion PD control split across 3 orthogonal wheels | MIT | 49 tests, including physics checks: kinetic energy constant in torque-free motion, and momentum changing exactly with applied torque. A test pattern for the Digital Simulation. New, no users yet |
+| [brunopinto900/attitude_control_reaction_wheels](https://github.com/brunopinto900/attitude_control_reaction_wheels) | Python simulation: 4 pyramid wheels, a two-loop controller (attitude error to rate command, then rate tracking), wheel saturation, a failed-wheel case, and a 3D animation | None | A teaching simulation |
+| [Bespi123/ADCSim](https://github.com/Bespi123/ADCSim) | MATLAB ADCS simulator with reaction wheel and sensor models | GPL-3.0 | A possible reference for the Digital Simulation's wheel model |
 
 ## Papers and theses
 
