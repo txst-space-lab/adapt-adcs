@@ -12,6 +12,7 @@ The Portland State Aerospace Society (PSAS) builds reaction wheels for its OreSa
 | [2025 poster](2025-kane-pardy-advancing-oresat-adcs-poster.pdf) | Kane-Pardy, *Advancing the OreSat ADCS*, PSU graduate internship poster, 2025: flywheel sizing, a new controller board, and a plan to compare motor control algorithms. |
 | Kane-Pardy, *Advancing the OreSat ADCS: Design & Implementation of an Open-Source Reaction Wheel System*, MS thesis, Portland State, 2026 ([PDXScholar](https://pdxscholar.library.pdx.edu/open_access_etds/7192), in copyright, not copied) | The thesis behind the 2025 poster. Per its abstract: a custom three-phase motor controller running Zephyr, and a hardware-in-the-loop comparison. Trapezoidal control used the least energy and ran coolest; FOC had the strongest dynamic response, the highest torque and the most consistent torque, and was chosen. |
 | [2026 poster](2026-lutz-oresat-reaction-wheel-upgrade-poster.pdf) | Lutz et al., *OreSat Reaction Wheel Upgrade*, OSGC Student Symposium, 2026-05-22: building flight units from drone motors and hybrid bearings. |
+| [2026 datasheet](2026-oresat-reaction-wheel-datasheet.pdf) | *OreSat Reaction Wheel Datasheet* for the v4.1 wheel on the v8.1.1 board, 2026-11-03 (2 pages, printed from the [Google Doc](https://docs.google.com/document/d/1jCJMzknMak2W2Ypb0bf-8lYyH5XpqKdnkvfkYbZVs0I/edit)): power, mass, momentum, torque, speed and interfaces of the current wheel. |
 | [Captive hanging test](https://www.youtube.com/watch?v=Is1gPHlewtg) (video) | The 2016 ground test article hanging from a string. Pushed by hand, the wheels stop the rotation and then resist further pushes. This is our string-push test. |
 | [Drop tower test](https://www.youtube.com/watch?v=cC2FpmCP5B4) (video) | The same article in PSU's 2.1 s Dryden Drop Tower. |
 | [OreSat walk-through, part 6](https://www.youtube.com/watch?v=S82_q8WI_1M) (video) | PSAS tour of OreSat's reaction wheels and magnetorquers. |
@@ -42,6 +43,25 @@ Current OreSat work lives in other repos: [oresat-reaction-wheel-hardware](https
 - **2025–2026: motor control.** The plan was to implement three algorithms on a new controller board running Zephyr RTOS and compare them: trapezoidal (simple, but its torque ripple shakes the sensors), sinusoidal, and field-oriented control (FOC, smoothest across all speeds). The flywheel grew from 42 g to 70 g after modeling the 2U and 3U spacecraft. The finished thesis (2026) chose FOC.
 - **2026: flight units.** They now build flight wheels from drone motors and hybrid bearings, at a fraction of COTS cost. The hard part was hand assembly. They succeeded more often after changing their procedures and redesigning the wheel.
 
+### The current wheel (v4.1 wheel, v8.1.1 board)
+
+From the 2026 datasheet:
+
+- **Motor.** A modified ECO Micro Series 1106 6000 kV drone motor.
+- **Size and mass.** 50 × 36 × 37.1 mm and 109 g, counting the wheel, board and brackets.
+- **Power.**
+  - Runs from a 2S lithium pack: 6.0 V minimum, 7.2 V nominal, 8.4 V maximum, 12 V absolute maximum.
+  - Draws 2 A, with 4 A peaks.
+  - Holding speed costs 0.5 W idle, 1.3 W at 5,000 RPM, 1.9 W at 8,000 RPM and 6.2 W at 30,000 RPM. The peak is 25 W.
+- **Performance.**
+  - Momentum: 23 mN·m·s.
+  - Torque: 0.9 mN·m at the default acceleration of 20 rev/s², and 6.5 mN·m at most (calculated).
+  - Top speed: 500 rev/s (30,000 RPM).
+- **Electronics and interfaces.**
+  - An STM32G474 microcontroller, programmed over SWD.
+  - Commands use CANopen over 1 Mbps CAN 2.0, and firmware updates also go over CAN.
+  - A UART is wired but has no interface yet.
+
 ## How this applies to us
 
 **Reaction Wheel Demonstrator**
@@ -52,6 +72,7 @@ Current OreSat work lives in other repos: [oresat-reaction-wheel-hardware](https
   - Cheap drone motors work.
   - OreSat's own later work moves toward FOC for smooth torque, which matches the advice to drive a gimbal motor with SimpleFOC rather than a drone ESC.
   - Overpowered motors make a forgiving first rig.
+  - The datasheet gives a known-good part to start from: a 1106-size, 6000 kV drone motor holding a wheel at a few thousand RPM for 1–2 W.
 - **Casing** ([What form factor is the Reaction Wheel Demonstrator casing?](https://github.com/txst-space-lab/adapt-adcs/issues/19)): OreSat printed a 1U mock-up even though they flew 2U. Their SolidWorks parts (`SW_CAD_1U_cubesat/`, `wheel.SLDPRT`, `motorBracket.SLDPRT`) can serve as a reference.
 - **Electronics** ([Which controller board, motor drivers and IMU drive the Reaction Wheel Demonstrator?](https://github.com/txst-space-lab/adapt-adcs/issues/20)):
   - The Intel Edison has been discontinued, so their board isn't one we can copy.
