@@ -17,7 +17,7 @@ The Portland State Aerospace Society (PSAS) builds reaction wheels for its OreSa
 | [Drop tower test](https://www.youtube.com/watch?v=cC2FpmCP5B4) (video) | The same article in PSU's 2.1 s Dryden Drop Tower. |
 | [OreSat walk-through, part 6](https://www.youtube.com/watch?v=S82_q8WI_1M) (video) | PSAS tour of OreSat's reaction wheels and magnetorquers. |
 
-Current OreSat work lives in other repos: [oresat-reaction-wheel-hardware](https://github.com/oresat/oresat-reaction-wheel-hardware) and [oresat-reaction-wheel-firmware](https://github.com/oresat/oresat-reaction-wheel-firmware) (wheel v8, no license file), [oresat-adcs-hardware](https://github.com/oresat/oresat-adcs-hardware) (controller boards, CERN-OHL-S v2), and [oresat-adcs-software](https://github.com/oresat/oresat-adcs-software) (Python quaternion, frame and attitude estimation code, GPL-3.0).
+Current OreSat work lives in other repos: [oresat-reaction-wheel-hardware](https://github.com/oresat/oresat-reaction-wheel-hardware) (wheel v8, no license file), [oresat-adcs-hardware](https://github.com/oresat/oresat-adcs-hardware) (controller boards, CERN-OHL-S v2), and [oresat-adcs-software](https://github.com/oresat/oresat-adcs-software) (Python quaternion, frame and attitude estimation code, GPL-3.0). For wheel firmware, see [Firmware](#firmware).
 
 ## Key takeaways
 
@@ -62,6 +62,26 @@ From the 2026 datasheet:
   - Commands use CANopen over 1 Mbps CAN 2.0, and firmware updates also go over CAN.
   - A UART is wired but has no interface yet.
 
+### Firmware
+
+As of 2026-11-10, the firmware that runs on the datasheet's v8.1.1 board isn't public. What is public:
+
+| Where | What it is | State | License |
+|---|---|---|---|
+| [oresat-reaction-wheel-app, branch `OreSat-Reaction-Wheel-ThesisWork`](https://github.com/oresat/oresat-reaction-wheel-app/tree/OreSat-Reaction-Wheel-ThesisWork) | The Kane-Pardy thesis firmware: a Zephyr app for a controller board built around an NXP MCXN947, with an MA732 magnetic encoder, an LMG2100 gate driver and INA296 current sensing. | Pushed July 2026. CAN is not implemented yet. The default branch holds only a README. | None |
+| [oresat-zephyr, branch `rw-dev`](https://github.com/oresat/oresat-zephyr/tree/rw-dev/apps/reaction_wheel) | Early Zephyr firmware for the STM32G474: PWM on the high-resolution timer, an MA702 encoder driver, and CANopen setup. | Oct–Dec 2024. No control loop. `master` has only a placeholder that reports sensor readings over CAN. | GPL-3.0 |
+| [oresat-reaction-wheel-firmware](https://github.com/oresat/oresat-reaction-wheel-firmware) | Described as firmware for "v8 and later (not Zephyr-based)", so probably where the v8.1.1 board's code will go. | Only a README, from an initial commit on 2026-10-09. | None |
+
+The thesis branch is the useful one. Its layout:
+
+- **Control loop.** Motor control runs at 16 kHz with bounded work, and a state machine supervises it. Invalid measurements or faults float the inverter.
+- **Commutation.** Four interchangeable ways of driving the motor (`src/commutation/`): open-loop, trapezoidal, sinusoidal and FOC. The controller doesn't depend on which one is selected.
+- **Calibration.** Stored in on-board flash.
+- **Telemetry.** Streamed over UART for experiments.
+- **Experiments.** Build configurations for torque against speed, dynamic response, thermal soak and power ripple (`configurations/experiments/`), with Python scripts that process the results.
+- **Bring-up tests.** For the encoder, current sensing, PWM and calibration (`configurations/bringup/`, `tests/bringup/`).
+- **Docs.** Thirteen documents in `docs/`, from architecture to debugging.
+
 ## How this applies to us
 
 **Reaction Wheel Demonstrator**
@@ -78,6 +98,7 @@ From the 2026 datasheet:
   - The Intel Edison has been discontinued, so their board isn't one we can copy.
   - The pattern is still useful: a Linux board running Python, an I²C IMU, and PWM plus direction pins to a motor driver.
   - OreSat has since moved to a microcontroller running an RTOS.
+  - The [thesis firmware](#firmware) shows how OreSat structures motor control on that microcontroller. It's a reference for our motor control, and its experiment configurations are a template for characterizing our motors.
 - **Model and data.** Their single-axis model, with string torsion as the spring term, is a ready template for predicting the string-push response. Their drop test CSVs can serve as a first check of the Digital Simulation.
 
 **Flight unit**
@@ -87,5 +108,6 @@ From the 2026 datasheet:
 
 **Licensing.** Before copying OreSat code or hardware designs into ADAPT, check the license:
 - oresat-adcs-software is GPL-3.0 and the boards are CERN-OHL-S, both copyleft.
-- The 2016 repo and the v8 wheel repos have no license file at all.
+- The 2016 repo, the v8 wheel repos and the thesis firmware have no license file at all.
+- oresat-zephyr, which holds the 2024 STM32G474 firmware, is GPL-3.0.
 - Reading them and reusing their ideas is fine.
