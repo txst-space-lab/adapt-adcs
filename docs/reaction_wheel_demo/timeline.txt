@@ -1,0 +1,27 @@
+Reaction Wheel Demo, Fall 2026
+
+ACDS Team, Texas State Space Lab
+
+Goal: This mock up should be able to
+ 1. apply a torque of [TBD] Nm
+ 2. cause a [TBD] rad/s change in the angular 
+ 3. 
+
+
+Rough milestones:
+ - Schematic draft: 11/20/2026
+ - Frame CAD Model: 11/20/2026
+ - Motor selection: 11/30/2026
+ - Casing print: 11/30/2026
+ - Motor and flywheel construction: 12/13/26
+ - Wheel spinning under control: 12/18/26 
+ - Closed-loop rotation of mock: 12/31/26
+
+Dependencies:
+ - Schematic draft: None
+ - Frame CAD model: Schematic draft 
+ - Motor Selection: Schematic draft, CAD model, PURCHASE
+ - Wheel spinning
+
+Owners:
+ tbd at 11/13 meeting
