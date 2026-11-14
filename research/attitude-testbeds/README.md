@@ -102,12 +102,13 @@ ADAPT plans to fly star trackers (2+), fine sun sensors (2–6), IMUs, reaction 
   - The repo holds construction documents, a Python command-line controller and KiCad controller boards, licensed GPL-3.0-or-later and CERN-OHL-S-2.0 ([LICENSES](https://github.com/oresat/oresat-helmholtz/tree/main/LICENSES)).
   - Version 2 runs on a Raspberry Pi Pico, with a motor driver per coil pair and an INA226 current monitor.
   - The coils have 58 turns and run at up to 4.92 A and 15.2 V ([SOP](https://github.com/oresat/oresat-helmholtz/blob/main/docs/SOP.md)).
-- **UC CubeCats (University of Cincinnati).** Built to a cost target under $5,000 with Ohio Space Grant funding ([project page](https://uccubecats.github.io/HelmholtzCage.html)):
-  - The coils are square, 7.56–8.00 ft on a side, on aluminum U-channel.
-  - The uniform volume is 30 cm on a side, enough for a 3U in any orientation.
-  - The cage reaches ±1.5 G at 10 A, driven by three HP 6038A supplies over GPIB.
-  - A Python GUI with a truth magnetometer runs it.
-  - The team's 2019 SmallSat poster is titled "An Open-Source Helmholtz Cage Design with Air-Bearing Table for 1U and 3U CubeSat Testing" ([USU](https://digitalcommons.usu.edu/smallsat/2019/all2019/12)).
+- **UC CubeCats (University of Cincinnati).** A room-sized 3-axis cage funded by an Ohio Space Grant Consortium grant, with a requirement to cost less than $5,000 ([project page](https://uccubecats.github.io/HelmholtzCage.html)):
+  - The coils are square: 7.56, 7.77 and 8.00 ft on a side for the inner, middle and outer pairs. The ideal is 8 ft with a spacing-to-side ratio of 0.5445 (4.356 ft between the coils of a pair).
+  - The frame is 1.25 in aluminum U-channel joined with L-brackets and 3D-printed parts. Each coil has 45 turns of 14 AWG wire, about 8,640 ft in the whole cage.
+  - The design target is a uniform field over a 30 cm cube at the center, enough for a 3U in any orientation. The page gives no measured as-built volume.
+  - The maximum field per coil pair is 1.5 G in either direction at 10 A. Three HP 6038A supplies (240 W each), one per coil pair, connect to the control computer through a GPIB-USB interface.
+  - A Python program with a custom GUI runs connection checks, calibration (field per axis against input voltage), static tests and, as a work in progress, dynamic tests replayed from a file such as an STK output. A truth magnetometer at the center gives feedback.
+  - The page has no design files or licence; the team's code is under [github.com/uccubecats](https://github.com/uccubecats). The team's 2019 SmallSat poster is titled "An Open-Source Helmholtz Cage Design with Air-Bearing Table for 1U and 3U CubeSat Testing" ([USU](https://digitalcommons.usu.edu/smallsat/2019/all2019/12)).
 - **Princeton TigerSats (2023).** A miniaturized 3-axis cage for 1U–2U with under 1% field deviation for 1U, citing low material cost and documented coil design ([SmallSat 2023](https://digitalcommons.usu.edu/smallsat/2023/all2023/252)).
 - **CMU (2022).** A single-axis Helmholtz pair cut from wood on a laser cutter, radius 20 cm and 300 turns, designed for 125 µT. It only cancels Earth's field along one axis; the author names a 3-axis cage as future work ([Jensen thesis](https://www.ri.cmu.edu/app/uploads/2022/08/ri_thesis_template.pdf), section 4.2.1).
 - **University of Bologna.** A COTS three-axis cage (1.3 m coils, ±10 G) cost €8,000 with control ([Modenini et al.](https://doi.org/10.3390/aerospace7030031), Table 6).
