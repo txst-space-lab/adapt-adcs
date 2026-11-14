@@ -112,6 +112,8 @@ ADAPT plans to fly star trackers (2+), fine sun sensors (2–6), IMUs, reaction 
 - **CMU (2022).** A single-axis Helmholtz pair cut from wood on a laser cutter, radius 20 cm and 300 turns, designed for 125 µT. It only cancels Earth's field along one axis; the author names a 3-axis cage as future work ([Jensen thesis](https://www.ri.cmu.edu/app/uploads/2022/08/ri_thesis_template.pdf), section 4.2.1).
 - **University of Bologna.** A COTS three-axis cage (1.3 m coils, ±10 G) cost €8,000 with control ([Modenini et al.](https://doi.org/10.3390/aerospace7030031), Table 6).
 
+**Our lab once had one.** Asked about the CubeSat case a senior design team printed about three years ago, Evan asked whether that meant "the Helmholtz cage that we once had" (Kelsey Morris's casing update for [#11](https://github.com/txst-space-lab/adapt-adcs/issues/11), 2026-11-13). Where that cage and its design files are now is unknown. Kelsey pointed to the UC CubeCats cage above as an example. If the old cage or its files turn up, they are a head start on build 2 below.
+
 **Cost and skills.** DIY cages run from a few hundred dollars (single axis, wood frame) to a few thousand (3-axis, room-sized, bench supplies). The skills are coil winding, current control and field mapping. The coils get hot at high current, so the cage needs a supervised operating procedure (see the OreSat SOP).
 
 **Limits.** Nearby steel and electronics distort the field, and the uniform volume is a fraction of the cage size. A 6U mock-up needs a cage on the UC CubeCats scale.
