@@ -4,7 +4,7 @@ ADCS subsystem team meeting. Only ADAPT-relevant points are recorded here.
 
 **Attendees:** Nate Gay, Jack Holden, Logan Magaha, Collin Cook (Payload, sitting in)
 
-**Recording:** SharePoint (TXST login required) <!-- TODO: add link -->
+**Recording:** [SharePoint](https://txst.sharepoint.com/:v:/r/sites/GRP-texasstatespacelab2/Shared%20Documents/ADAPT/Meetings/ADCS/2026-11-13-team-sync.mp4) (TXST login required)
 
 ## Team and tools
 
@@ -28,7 +28,7 @@ ADCS subsystem team meeting. Only ADAPT-relevant points are recorded here.
 ## Education
 
 - **Rotational dynamics is the core of the work,** and the team's background varies. Collect resources (a dynamics textbook covers angular velocity and momentum), and possibly give a short lecture (#30). A second session on magnetics would support the Helmholtz cage and magnetorquers.
-- **Magnetic-only pointing:** a lab member's research on pointing with magnetorquers alone could be checked against ADAPT data as well as earlier mission data.
+- **Magnetic-only pointing:** a lab member's research on pointing with magnetorquers alone could be checked against ADAPT data as well as data from Maia.
 
 ## Action items
 
